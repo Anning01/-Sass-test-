@@ -33,7 +33,7 @@ class UserManager(BaseUserManager):
                      password=None, **extra_fields):
         now = timezone.now()
         if not username:
-            raise ValueError('The given username must be set')
+            raise ValueError(_('The given username must be set'))
         user = self.model(username=username, is_active=True,
                           is_staff=is_staff, is_superuser=is_superuser,
                           date_joined=now, **extra_fields)
@@ -142,7 +142,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             )
             return {
                 'result': False,
-                'message': u'ESB发送短信接口错误，可能由权限问题导致'
+                'message': _(u'ESB发送短信接口错误，可能由权限问题导致')
             }
         return {
             'result': result['result'],
@@ -160,7 +160,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             VerifyInfo.objects.create(user=self, code=code)
             ret = self.send_sms(code)
             if ret['result']:
-                ret['message'] = u'初始化验证码，发送成功'
+                ret['message'] = _(u'初始化验证码，发送成功')
 
         elif v_info_cnt == 1:
             cur = v_info[0]
@@ -174,10 +174,10 @@ class User(AbstractBaseUser, PermissionsMixin):
                     # 重发已生成的
                     ret = self.send_sms(cur.code)
                     if ret['result']:
-                        ret['message'] = u'已生成的验证码，重发成功'
+                        ret['message'] = _(u'已生成的验证码，重发成功')
                 else:
                     # 等待时间不足，不重发
-                    ret = {'result': False, 'message': u'暂不能重发验证码，请稍等'}
+                    ret = {'result': False, 'message': _(u'暂不能重发验证码，请稍等')}
             else:
                 # 已过期，重新生成并重发
                 new_code = random.randint(111111, 999999)
@@ -185,12 +185,12 @@ class User(AbstractBaseUser, PermissionsMixin):
                 cur.save()
                 ret = self.send_sms(new_code)
                 if ret['result']:
-                    ret['message'] = u'重新生成验证码，发送成功'
+                    ret['message'] = _(u'重新生成验证码，发送成功')
         else:
             logger.error(
                 u'found more than one code of the user->[%s]' % self.id
             )
-            ret = {'result': False, 'message': u'数据库中的验证码异常'}
+            ret = {'result': False, 'message': _(u'数据库中的验证码异常')}
         return ret
 
     def verify_code(self, code):

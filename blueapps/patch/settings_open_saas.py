@@ -13,6 +13,9 @@ ESB_SDK_NAME = 'blueking.component'
 # 蓝鲸PASS平台URL
 BK_PAAS_HOST = os.getenv('BK_PAAS_HOST', BK_URL)
 
+# 蓝鲸开发者页面
+BK_DEV_URL = '%s/app/list/' % BK_PAAS_HOST
+
 # 兼容component的APP_ID,APP_TOKEN
 APP_CODE = APP_ID = os.environ.get('APP_ID', APP_CODE)
 SECRET_KEY = APP_TOKEN = os.environ.get('APP_TOKEN', SECRET_KEY)
@@ -37,12 +40,12 @@ if 'BK_BROKER_URL' in os.environ:
 # SITE_URL,STATIC_URL,,FORCE_SCRIPT_NAME
 # 测试环境
 if os.getenv('BK_ENV') == 'testing':
-    BK_URL = os.environ.get("BK_URL", "%s/console" % BK_PAAS_HOST)
+    BK_URL = os.environ.get("BK_URL", "%s/console/" % BK_PAAS_HOST)
     SITE_URL = os.environ.get("BK_SITE_URL", '/t/%s/' % APP_CODE)
     STATIC_URL = '%sstatic/' % SITE_URL
 # 正式环境
 if os.getenv('BK_ENV') == 'production':
-    BK_URL = os.environ.get("BK_URL", "%s/console" % BK_PAAS_HOST)
+    BK_URL = os.environ.get("BK_URL", "%s/console/" % BK_PAAS_HOST)
     SITE_URL = os.environ.get("BK_SITE_URL", '/o/%s/' % APP_CODE)
     STATIC_URL = '%sstatic/' % SITE_URL
 
@@ -51,8 +54,11 @@ REMOTE_STATIC_URL = '%sremote/' % STATIC_URL
 
 # 日志
 BK_LOG_DIR = os.getenv('BK_LOG_DIR', '/data/apps/logs/')
-LOGGING = get_paas_v2_logging_config_dict(is_local=IS_LOCAL,
-                                          bk_log_dir=BK_LOG_DIR)
+LOGGING = get_paas_v2_logging_config_dict(
+    is_local=IS_LOCAL,
+    bk_log_dir=BK_LOG_DIR,
+    log_level=locals().get('LOG_LEVEL', 'INFO')
+)
 
 # 请求官方 API 默认版本号，可选值为："v2" 或 ""；其中，"v2"表示规范化API，
 # ""表示未规范化API.如果外面设置了该值则使用设置值,否则默认使用v2
@@ -61,3 +67,8 @@ DEFAULT_BK_API_VER = locals().get('DEFAULT_BK_API_VER', 'v2')
 # STATIC_ROOT,静态文件收集文件夹,由于企业版需要用户手动收集,此处设为空,
 # 同时需要设置STATICFILES_DIRS不改变
 STATIC_ROOT = None
+
+# open环境使用cookie中的blueking_language来控制语言
+LANGUAGE_SESSION_KEY = 'blueking_language'
+LANGUAGE_COOKIE_NAME = 'blueking_language'
+IS_DISPLAY_LANGUAGE_CHANGE = 'none'

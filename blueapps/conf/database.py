@@ -24,4 +24,7 @@ def get_default_database_config_dict(settings_module):
         'PASSWORD': os.environ['%s_PASSWORD' % db_prefix],
         'HOST': os.environ['%s_HOST' % db_prefix],
         'PORT': os.environ['%s_PORT' % db_prefix],
+        'OPTIONS': {
+            'isolation_level': 'repeatable read'
+        },
     }

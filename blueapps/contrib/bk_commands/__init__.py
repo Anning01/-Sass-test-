@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-@author: willgchen
 @created: 2017/6/7
 @desc:
 """

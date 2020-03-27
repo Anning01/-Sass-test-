@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import gettext_lazy as _
 from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
@@ -24,7 +25,7 @@ class _ConfFixture(object):
                 raise ImproperlyConfigured(
                     'Requested %s, but ConfFixture are not configured. '
                     'You must set options in ConfFixture in right site.conf.py'
-                    % (name))
+                    % name)
             return setting
 
         raise KeyError('%s not exist' % name)
@@ -44,6 +45,6 @@ AUTH_USER_MODEL = 'account.User'
 SECOND_VERIFY_CONF = {
     'VALID_MINUTES': 5,
     'RETRY_MINUTES': 3,
-    'SMS_FORMAT': u'您正在蓝鲸应用上执行敏感操作，验证码：{}',
+    'SMS_FORMAT': _(u'您正在蓝鲸应用上执行敏感操作，验证码：{}'),
     'CODE_NAME': 'bk_verify_code'
 }

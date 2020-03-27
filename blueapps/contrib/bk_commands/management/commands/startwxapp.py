@@ -46,7 +46,10 @@ class Command(TemplateCommand):
 
         template_dir = path.join(blueapps.__path__[0], 'conf', base_subdir)
         run_ver = None
-        conf_file = open(path.join(os.getcwd(), 'config', '__init__.py'))
+        if PY_VER[0] == '2':
+            conf_file = open(path.join(os.getcwd(), 'config', '__init__.py'))
+        else:
+            conf_file = open(path.join(os.getcwd(), 'config', '__init__.py'), encoding='utf-8')
         for line in conf_file.readlines():
             if line.startswith('RUN_VER'):
                 run_ver = line[11:-2]

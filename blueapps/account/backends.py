@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.utils.module_loading import import_string
-
 from blueapps.account.conf import ConfFixture
-
-
-def load_backend(backend):
-    path = 'blueapps.account.components.{backend}'.format(backend=backend)
-    return import_string(path)
-
+from blueapps.account.utils import load_backend
 
 if hasattr(ConfFixture, 'USER_BACKEND'):
     UserBackend = load_backend(ConfFixture.USER_BACKEND)
@@ -17,3 +10,6 @@ if hasattr(ConfFixture, 'WEIXIN_BACKEND'):
 
 if hasattr(ConfFixture, 'RIO_BACKEND'):
     RioBackend = load_backend(ConfFixture.RIO_BACKEND)
+
+if hasattr(ConfFixture, 'BK_JWT_BACKEND'):
+    BkJwtBackend = load_backend(ConfFixture.BK_JWT_BACKEND)

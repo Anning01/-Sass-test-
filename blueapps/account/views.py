@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+import time
+
 from django.shortcuts import render
 from django.http import JsonResponse
 
@@ -29,3 +32,16 @@ def login_page(request):
 def send_code_view(request):
     ret = request.user.send_code()
     return JsonResponse(ret)
+
+
+def get_user_info(request):
+
+    return JsonResponse({
+                "code": 0,
+                "data": {
+                    "id": request.user.id,
+                    "username": request.user.username,
+                    "timestamp": time.time()
+                },
+                "message": 'ok'
+            })

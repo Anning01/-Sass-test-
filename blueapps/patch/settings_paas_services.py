@@ -36,3 +36,6 @@ if APM_ID and APM_TOKEN:
         patch(requests=True, pymysql=False)
     except Exception as e:
         print("patch fail for requests and pymysql: %s" % e)
+
+# 非open环境使用页面的语言切换按钮来控制语言
+IS_DISPLAY_LANGUAGE_CHANGE = 'block'

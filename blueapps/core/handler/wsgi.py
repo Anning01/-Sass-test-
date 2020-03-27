@@ -12,5 +12,8 @@ class BkWSGIHandler(WSGIHandler):
                 script_name = ''
             environ['SCRIPT_NAME'] = script_name
             settings.FORCE_SCRIPT_NAME = settings.SITE_URL = '%s/' % script_name
-            settings.STATIC_URL = '%sstatic/' % settings.SITE_URL
+
+            # 如果没有独立域名的配置，需要不断的适配，否则可以直接使用
+            if not settings.STATIC_URL.startswith("http"):
+                settings.STATIC_URL = '%sstatic/' % settings.SITE_URL
         return super(BkWSGIHandler, self).__call__(environ, start_response)

@@ -11,12 +11,28 @@ from blueapps.core.celery import celery_app
 
 # app 基本信息
 
+
+def get_env_or_raise(key):
+    """Get an environment variable, if it does not exist, raise an exception
+    """
+    value = os.environ.get(key)
+    if not value:
+        raise RuntimeError(
+            ('Environment variable "{}" not found, you must set this variable to run this application.'
+             ' See http://docs.open.oa.com/topics/faq_for_developing#36-本地开发时报错-environment-variable-x-not-found-怎么办'
+             ).format(key)
+        )
+    return value
+
+
+# 这些变量将由平台通过环境变量提供给应用，本地开发时需手动配置，详见：http://docs.open.oa.com/topics/company_tencent/python_framework_usage#29-配置环境变量
+# 应用 ID
+APP_CODE = ''
+# 应用用于调用云 API 的 Secret
+SECRET_KEY = ''
+
 # SaaS运行版本，如非必要请勿修改
 RUN_VER = 'open'
-# SaaS应用ID
-APP_CODE = ''
-# SaaS安全密钥，注意请勿泄露该密钥
-SECRET_KEY = ''
 # 蓝鲸SaaS平台URL，例如 http://paas.bking.com
 BK_URL = None
 

@@ -31,8 +31,8 @@ class MakoTemplates(BaseEngine):
         # You can define them in the backend OPTIONS dict.
         options.setdefault('directories', self.template_dirs)
         options.setdefault('module_directory', tempfile.gettempdir())
-        options.setdefault('input_encoding', settings.FILE_CHARSET)
-        options.setdefault('output_encoding', settings.FILE_CHARSET)
+        options.setdefault('input_encoding', 'utf-8')
+        options.setdefault('output_encoding', 'utf-8')
         options.setdefault('encoding_errors', 'replace')
         options.setdefault('collection_size', 500)
         options.setdefault('default_filters',

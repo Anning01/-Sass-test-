@@ -4,6 +4,7 @@ import logging
 import traceback
 
 import requests
+from django.utils.translation import gettext_lazy as _
 from django.shortcuts import resolve_url
 from django.http import QueryDict
 from django.utils.six.moves.urllib.parse import urlparse, urlunparse
@@ -40,9 +41,9 @@ def send(url, method, params, timeout=None, **kwargs):
                                        data=json.dumps(params),
                                        timeout=timeout, **kwargs)
         else:
-            raise Exception(u"异常请求方式，%s" % method)
+            raise Exception(_(u"异常请求方式，%s") % method)
     except requests.exceptions.Timeout:
-        err_msg = (u"请求超时，url=%s，method=%s，params=%s，timeout=%s" % (
+        err_msg = (_(u"请求超时，url=%s，method=%s，params=%s，timeout=%s") % (
             url, method, params, timeout))
         raise ApiNetworkError(err_msg)
 
@@ -50,18 +51,18 @@ def send(url, method, params, timeout=None, **kwargs):
         url, method, params, response))
 
     if response.status_code != requests.codes.ok:
-        err_msg = (u"返回异常状态码，status_code=%s，url=%s，method=%s，"
-                   u"params=%s" % (response.status_code, url, method,
-                                   json.dumps(params)))
+        err_msg = (_(u"返回异常状态码，status_code=%s，url=%s，method=%s，"
+                   u"params=%s") % (response.status_code, url, method,
+                                    json.dumps(params)))
         raise ApiResultError(err_msg)
 
     try:
         return response.json()
     except Exception:
-        err_msg = (u"返回内容不符合 JSON 格式，url=%s，method=%s，params=%s，error=%s，"
-                   u"response=%s" % (url, method, json.dumps(params),
-                                     traceback.format_exc(),
-                                     response.text[:1000]))
+        err_msg = (_(u"返回内容不符合 JSON 格式，url=%s，method=%s，params=%s，error=%s，"
+                   u"response=%s") % (url, method, json.dumps(params),
+                                      traceback.format_exc(),
+                                      response.text[:1000]))
         raise ApiResultError(err_msg)
 
 

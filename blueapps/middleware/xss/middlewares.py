@@ -67,7 +67,7 @@ class CheckXssMiddleware(MiddlewareMixin):
                         if use_type == 'url':
                             new_value = url_escape(_get_value)
                         elif use_type == 'script':
-                            new_value = check_script(_get_value, 1)
+                            new_value = check_script(_get_value)
                         elif use_type == 'name':
                             new_value = html_escape_name(_get_value)
                         elif _get_key in self.__escape_param_list:

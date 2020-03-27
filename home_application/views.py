@@ -8,11 +8,18 @@ def home(request):
     """
     首页
     """
-    return render(request, 'home_application/home.html')
+    return render(request, 'home_application/index_home.html')
+
+
+def dev_guide(request):
+    """
+    开发指引
+    """
+    return render(request, 'home_application/dev_guide.html')
 
 
 def contact(request):
     """
-    联系我们
+    联系页
     """
     return render(request, 'home_application/contact.html')

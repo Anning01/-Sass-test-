@@ -14,9 +14,9 @@ from blueapps.contrib.bk_commands.management.templates import \
 
 platform_esb_minimum_version_map = OrderedDict(
     [('ieod', '0.0.68'),
-     ('clouds', '0.0.42'),
+     ('clouds', '0.0.52'),
      ('qcloud', '0.1.14'),
-     ('tencent', '0.0.21'),
+     ('tencent', '0.0.24'),
      ('open', '')]
 )
 
@@ -68,7 +68,7 @@ class Command(BlueTemplateCommand):
 
     def handle(self, **options):
         app_code, target = options.pop('name'), options.pop('directory')
-        self.validate_name(app_code, 'project')
+        # self.validate_name(app_code, 'project') app_code并不是项目名称，当app_code为test-test-test这种形式会引起报错，所以不需要检查app_code
 
         # Check that the project_name cannot be imported.
         try:
@@ -114,12 +114,15 @@ class Command(BlueTemplateCommand):
         v3_requirements_file = os.path.join(top_dir, 'requirements-v3.txt')
         # 最终的requirements.txt路径
         requirements_file = os.path.join(top_dir, 'requirements.txt')
-        # open保留requirements-open.txt,并重命名为requirements.txt
+
+        # open版本包定制
         if run_ver == 'open':
+            # 保留requirements - open.txt, 并重命名为requirements.txt
             os.remove(v3_requirements_file)
             os.rename(open_requirements_file, requirements_file)
-        # v3(ieod,qcloud,clouds,tencent)保留requirements-v3.txt,并重命名为requirements.txt
+        # v3(ieod,qcloud,clouds,tencent)版本包定制
         else:
+            # 保留requirements-v3.txt,并重命名为requirements.txt
             os.remove(open_requirements_file)
             os.rename(v3_requirements_file, requirements_file)
 

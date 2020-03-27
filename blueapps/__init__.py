@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-VERSION = '1.1.4'
+VERSION = '3.2.1'
 __version__ = VERSION
 
 
-RUN_VER = "open"
+RUN_VER = ""
 
 
 def get_run_ver():

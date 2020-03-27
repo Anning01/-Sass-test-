@@ -32,7 +32,6 @@ MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # 跨域检测中间件， 默认关闭
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -44,19 +43,10 @@ MIDDLEWARE = (
     'blueapps.account.middlewares.WeixinLoginRequiredMiddleware',
     'blueapps.account.middlewares.LoginRequiredMiddleware',
     # exception middleware
-    'blueapps.core.exceptions.middleware.AppExceptionMiddleware'
+    'blueapps.core.exceptions.middleware.AppExceptionMiddleware',
+    # django国际化中间件
+    'django.middleware.locale.LocaleMiddleware',
 )
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-try:
-    import pymysql
-
-    pymysql.install_as_MySQLdb()
-    # Patch version info to forcely pass Django client check
-    setattr(pymysql, 'version_info', (1, 2, 6, "final", 0))
-except ImportError as e:
-    raise ImportError("PyMySQL is not installed: %s" % e)
 
 DATABASES = {
     'default': get_default_database_config_dict(locals())
@@ -146,3 +136,9 @@ RE_WECHAT = re.compile(r'MicroMessenger', re.IGNORECASE)
 
 # CSRF Config
 CSRF_COOKIE_NAME = 'csrftoken'
+
+# close celery hijack root logger
+CELERYD_HIJACK_ROOT_LOGGER = False
+
+# log_dir_prefix
+LOG_DIR_PREFIX = '/app/v3logs/'

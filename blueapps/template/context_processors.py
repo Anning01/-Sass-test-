@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 import json
 import logging
+import datetime
 
 from django.conf import settings
 
@@ -39,6 +40,8 @@ def blue_settings(request):
             'STATIC_VERSION': settings.STATIC_VERSION,
             # 蓝鲸平台URL
             'BK_URL': settings.BK_URL,
+            # 蓝鲸开发者页面
+            'BK_DEV_URL': settings.BK_DEV_URL,
             # 用户名
             'USERNAME': username,
             # 用户昵称
@@ -52,7 +55,13 @@ def blue_settings(request):
             # WEIXIN 远程静态资源链接
             'WEIXIN_REMOTE_STATIC_URL': settings.WEIXIN_REMOTE_STATIC_URL,
             # 是否调试模式
-            'DEBUG': json.dumps(settings.DEBUG)
+            'DEBUG': json.dumps(settings.DEBUG),
+            # 当前时间
+            'NOW': datetime.datetime.now(),
+            # 前后端联合开发的静态资源路径, 这个变量可选配置
+            'BK_STATIC_URL': getattr(settings, 'BK_STATIC_URL', ''),
+            # 是否使用blueking_language切换国际化语言
+            'IS_DISPLAY_LANGUAGE_CHANGE': settings.IS_DISPLAY_LANGUAGE_CHANGE
         }
     except Exception:
         logger.exception(u"自定义模板上下文异常")

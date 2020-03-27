@@ -5,8 +5,9 @@ import logging
 import traceback
 
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.utils.deprecation import MiddlewareMixin
+from django.utils.translation import gettext_lazy as _
 
 from blueapps.core.exceptions.base import BlueException
 
@@ -27,24 +28,25 @@ class AppExceptionMiddleware(MiddlewareMixin):
         app后台错误统一处理
         """
 
+        self.exception = exception
+        self.request = request
+
         # 用户自我感知的异常抛出
         if isinstance(exception, BlueException):
-            logger.warning(
+            logger.log(
+                exception.LOG_LEVEL,
                 (u"""捕获主动抛出异常, 具体异常堆栈->[%s] status_code->[%s] & """
                  u"""client_message->[%s] & args->[%s] """) % (
                     traceback.format_exc(),
-                    exception.error_code,
+                    exception.ERROR_CODE,
                     exception.message,
                     exception.args
                 )
             )
 
-            response = JsonResponse({
-                'status_code': exception.error_code,
-                'message': exception.message
-            })
+            response = JsonResponse(exception.response_data())
 
-            response.status_code = exception.error_code // 100
+            response.status_code = exception.STATUS_CODE
             return response
 
         # 用户未主动捕获的异常
@@ -58,14 +60,17 @@ class AppExceptionMiddleware(MiddlewareMixin):
             )
         )
 
-        # 判断是否在debug模式中,
-        # 在这里判断是防止阻止了用户原本主动抛出的异常
-        if settings.DEBUG:
-            return None
+        # 对于check开头函数进行遍历调用，如有满足条件的函数，则不屏蔽异常
+        check_funtions = self.get_check_functions()
+        for check_function in check_funtions:
+            if check_function():
+                return None
 
         response = JsonResponse({
-            'status_code': 50000,
-            'message': u"系统异常,请联系管理员处理"
+            "result": False,
+            'code': "50000",
+            'message': _(u"系统异常,请联系管理员处理"),
+            'data': None
         })
         response.status_code = 500
 
@@ -74,3 +79,15 @@ class AppExceptionMiddleware(MiddlewareMixin):
             sentry_exception_handler(request=request)
 
         return response
+
+    def get_check_functions(self):
+        """获取需要判断的函数列表"""
+        return [getattr(self, func) for func in dir(self) if func.startswith('check') and callable(getattr(self, func))]
+
+    def check_is_debug(self):
+        """判断是否是开发模式"""
+        return settings.DEBUG
+
+    def check_is_http404(self):
+        """判断是否基于Http404异常"""
+        return isinstance(self.exception, Http404)

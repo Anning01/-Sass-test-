@@ -92,6 +92,22 @@ INIT_SUPERUSER = []
 # 使用mako模板时，默认打开的过滤器：h(过滤html)
 MAKO_DEFAULT_FILTERS = ['h']
 
+# BKUI是否使用了history模式
+IS_BKUI_HISTORY_MODE = False
+
+# 是否需要对AJAX弹窗登录强行打开
+IS_AJAX_PLAIN_MODE = False
+
+# 国际化配置
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+
+TIME_ZONE = 'Asia/Shanghai'
+LANGUAGE_CODE = 'zh-hans'
+
+LANGUAGES = (
+    ('en', u'English'),
+    ('zh-hans', u'简体中文'),
+)
 
 """
 以下为框架代码 请勿修改

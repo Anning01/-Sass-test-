@@ -18,6 +18,16 @@ class CollectionsSOPS(object):
             path='/api/c/compapi{bk_api_ver}/sops/create_task/',
             description=u'通过流程模板新建任务'
         )
+        self.get_common_template_info = ComponentAPI(
+            client=self.client, method='GET',
+            path='/api/c/compapi{bk_api_ver}/sops/get_common_template_info/',
+            description=u'查询单个公共流程模板详情'
+        )
+        self.get_common_template_list = ComponentAPI(
+            client=self.client, method='GET',
+            path='/api/c/compapi{bk_api_ver}/sops/get_common_template_list/',
+            description=u'查询公共模板列表'
+        )
         self.get_periodic_task_info = ComponentAPI(
             client=self.client, method='GET',
             path='/api/c/compapi{bk_api_ver}/sops/get_periodic_task_info/',
@@ -52,6 +62,11 @@ class CollectionsSOPS(object):
             client=self.client, method='GET',
             path='/api/c/compapi{bk_api_ver}/sops/get_template_list/',
             description=u'查询模板列表'
+        )
+        self.import_common_template = ComponentAPI(
+            client=self.client, method='POST',
+            path='/api/c/compapi{bk_api_ver}/sops/import_common_template/',
+            description=u'导入公共流程'
         )
         self.modify_constants_for_periodic_task = ComponentAPI(
             client=self.client, method='POST',
